@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Atelier — Modern Essentials"
+description = "A boutique-style multi-category ecommerce storefront for men, women, and kids, with product discovery, detail pages, cart, and a streamlined checkout experience."
+version = "1.0.0"
+id = "artifacts/atelier-store"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25082
+
+[services.development]
+run = "pnpm --filter @workspace/atelier-store run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/atelier-store", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/atelier-store/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25082"
+BASE_PATH = "/"

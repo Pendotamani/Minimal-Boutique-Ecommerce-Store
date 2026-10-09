@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: storefront
+    description: Shopify-backed product and cart operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,162 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /store/products:
+    get:
+      operationId: getStoreProducts
+      tags: [storefront]
+      summary: List products available to the storefront
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+            enum: [men, women, kids]
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+      responses:
+        "200":
+          description: Storefront products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StoreProduct"
+  /store/products/{handle}:
+    get:
+      operationId: getStoreProduct
+      tags: [storefront]
+      summary: Get a product and its purchasable variants
+      parameters:
+        - in: path
+          name: handle
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Storefront product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreProduct"
+        "404":
+          description: Product not found
+  /store/carts:
+    post:
+      operationId: createStoreCart
+      tags: [storefront]
+      summary: Create a Shopify cart
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreCartInput"
+      responses:
+        "201":
+          description: Created Shopify cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreCart"
+  /store/carts/{cartId}:
+    get:
+      operationId: getStoreCart
+      tags: [storefront]
+      summary: Retrieve a Shopify cart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Shopify cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreCart"
+  /store/carts/{cartId}/lines:
+    post:
+      operationId: addStoreCartLine
+      tags: [storefront]
+      summary: Add a variant to a Shopify cart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreCartLineInput"
+      responses:
+        "200":
+          description: Updated Shopify cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreCart"
+    patch:
+      operationId: updateStoreCartLine
+      tags: [storefront]
+      summary: Update a Shopify cart line quantity
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreCartLineUpdateInput"
+      responses:
+        "200":
+          description: Updated Shopify cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreCart"
+  /store/carts/{cartId}/lines/{lineId}:
+    delete:
+      operationId: removeStoreCartLine
+      tags: [storefront]
+      summary: Remove a line from a Shopify cart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: lineId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated Shopify cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreCart"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +191,145 @@ components:
           type: string
       required:
         - status
+    StoreProductImage:
+      type: object
+      properties:
+        url:
+          type: string
+        altText:
+          type: ["string", "null"]
+      required: [url]
+    StoreProductOption:
+      type: object
+      properties:
+        name:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+      required: [name, values]
+    StoreProductVariant:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        availableForSale:
+          type: boolean
+        price:
+          type: string
+        currencyCode:
+          type: string
+        selectedOptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/StoreProductOptionValue"
+      required: [id, title, availableForSale, price, currencyCode, selectedOptions]
+    StoreProductOptionValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      required: [name, value]
+    StoreProduct:
+      type: object
+      properties:
+        id:
+          type: string
+        handle:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        productType:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/StoreProductImage"
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/StoreProductOption"
+        variants:
+          type: array
+          items:
+            $ref: "#/components/schemas/StoreProductVariant"
+      required: [id, handle, title, description, productType, tags, images, options, variants]
+    StoreCartLine:
+      type: object
+      properties:
+        id:
+          type: string
+        merchandiseId:
+          type: string
+        title:
+          type: string
+        variantTitle:
+          type: string
+        image:
+          type: ["string", "null"]
+        quantity:
+          type: integer
+        unitPrice:
+          type: string
+        currencyCode:
+          type: string
+        lineTotal:
+          type: string
+      required: [id, merchandiseId, title, variantTitle, quantity, unitPrice, currencyCode, lineTotal]
+    StoreCart:
+      type: object
+      properties:
+        id:
+          type: string
+        checkoutUrl:
+          type: string
+        totalQuantity:
+          type: integer
+        subtotal:
+          type: string
+        currencyCode:
+          type: string
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/StoreCartLine"
+      required: [id, checkoutUrl, totalQuantity, subtotal, currencyCode, lines]
+    StoreCartInput:
+      type: object
+      properties:
+        merchandiseId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+      required: [merchandiseId, quantity]
+    StoreCartLineInput:
+      type: object
+      properties:
+        merchandiseId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+      required: [merchandiseId, quantity]
+    StoreCartLineUpdateInput:
+      type: object
+      properties:
+        lineId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+      required: [lineId, quantity]
 
