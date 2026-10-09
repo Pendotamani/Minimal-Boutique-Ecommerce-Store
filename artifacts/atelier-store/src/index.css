@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
@@ -79,70 +79,70 @@
   --elevate-1: rgba(0, 0, 0, 0.03);
   --elevate-2: rgba(0, 0, 0, 0.08);
 
-  --background: red; /*replace with H S L */
+  --background: 39 35% 96%;
 
-  --foreground: red; /*replace with H S L */
+  --foreground: 24 17% 18%;
 
-  --border: red; /*replace with H S L */
+  --border: 34 18% 84%;
 
-  --card: red; /*replace with H S L */
+  --card: 40 36% 98%;
 
-  --card-foreground: red; /*replace with H S L */
+  --card-foreground: 24 17% 18%;
 
-  --card-border: red; /*replace with H S L */
+  --card-border: 34 18% 84%;
 
-  --sidebar: red; /*replace with H S L */
+  --sidebar: 39 35% 96%;
 
-  --sidebar-foreground: red; /*replace with H S L */
+  --sidebar-foreground: 24 17% 18%;
 
-  --sidebar-border: red; /*replace with H S L */
+  --sidebar-border: 34 18% 84%;
 
-  --sidebar-primary: red; /*replace with H S L */
+  --sidebar-primary: 24 17% 18%;
 
-  --sidebar-primary-foreground: red; /*replace with H S L */
+  --sidebar-primary-foreground: 39 35% 96%;
 
-  --sidebar-accent: red; /*replace with H S L */
+  --sidebar-accent: 35 24% 90%;
 
-  --sidebar-accent-foreground: red; /*replace with H S L */
+  --sidebar-accent-foreground: 24 17% 18%;
 
-  --sidebar-ring: red; /*replace with H S L */
+  --sidebar-ring: 22 24% 44%;
 
-  --popover: red; /*replace with H S L */
+  --popover: 40 36% 98%;
 
-  --popover-foreground: red; /*replace with H S L */
+  --popover-foreground: 24 17% 18%;
 
-  --popover-border: red; /*replace with H S L */
+  --popover-border: 34 18% 84%;
 
-  --primary: red; /*replace with H S L */
+  --primary: 24 17% 18%;
 
-  --primary-foreground: red; /*replace with H S L */
+  --primary-foreground: 39 35% 96%;
 
-  --secondary: red; /*replace with H S L */
+  --secondary: 35 24% 90%;
 
-  --secondary-foreground: red; /*replace with H S L */
+  --secondary-foreground: 24 17% 18%;
 
-  --muted: red; /*replace with H S L */
+  --muted: 35 24% 90%;
 
-  --muted-foreground: red; /*replace with H S L */
+  --muted-foreground: 25 9% 43%;
 
-  --accent: red; /*replace with H S L */
+  --accent: 14 31% 62%;
 
-  --accent-foreground: red; /*replace with H S L */
+  --accent-foreground: 24 17% 18%;
 
-  --destructive: red; /*replace with H S L */
+  --destructive: 0 63% 48%;
 
-  --destructive-foreground: red; /*replace with H S L */
+  --destructive-foreground: 0 0% 98%;
 
-  --input: red; /*replace with H S L */
-  --ring: red; /*replace with H S L */
-  --chart-1: red; /*replace with H S L */
-  --chart-2: red; /*replace with H S L */
-  --chart-3: red; /*replace with H S L */
-  --chart-4: red; /*replace with H S L */
-  --chart-5: red; /*replace with H S L */
+  --input: 34 18% 82%;
+  --ring: 22 24% 44%;
+  --chart-1: 20 30% 50%;
+  --chart-2: 150 16% 46%;
+  --chart-3: 40 30% 55%;
+  --chart-4: 6 24% 62%;
+  --chart-5: 210 14% 48%;
 
-  --app-font-sans: 'Inter', sans-serif;
-  --app-font-serif: Georgia, serif;
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'DM Sans', sans-serif;
   --app-font-mono: Menlo, monospace;
   --radius: 0.5rem; /* 8px */
   --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0); /*replace with H S L */
@@ -228,68 +228,68 @@
   --elevate-1: rgba(255, 255, 255, 0.04);
   --elevate-2: rgba(255, 255, 255, 0.09);
 
-  --background: red; /*replace with H S L */
+  --background: 24 17% 18%;
 
-  --foreground: red; /*replace with H S L */
+  --foreground: 39 35% 96%;
 
-  --border: red; /*replace with H S L */
+  --border: 24 10% 31%;
 
-  --card: red; /*replace with H S L */
+  --card: 24 15% 22%;
 
-  --card-foreground: red; /*replace with H S L */
+  --card-foreground: 39 35% 96%;
 
-  --card-border: red; /*replace with H S L */
+  --card-border: 24 10% 31%;
 
-  --sidebar: red; /*replace with H S L */
+  --sidebar: 24 17% 18%;
 
-  --sidebar-foreground: red; /*replace with H S L */
+  --sidebar-foreground: 39 35% 96%;
 
-  --sidebar-border: red; /*replace with H S L */
+  --sidebar-border: 24 10% 31%;
 
-  --sidebar-primary: red; /*replace with H S L */
+  --sidebar-primary: 39 35% 96%;
 
-  --sidebar-primary-foreground: red; /*replace with H S L */
+  --sidebar-primary-foreground: 24 17% 18%;
 
-  --sidebar-accent: red; /*replace with H S L */
+  --sidebar-accent: 24 12% 28%;
 
-  --sidebar-accent-foreground: red; /*replace with H S L */
+  --sidebar-accent-foreground: 39 35% 96%;
 
-  --sidebar-ring: red; /*replace with H S L */
+  --sidebar-ring: 14 31% 62%;
 
-  --popover: red; /*replace with H S L */
+  --popover: 24 15% 22%;
 
-  --popover-foreground: red; /*replace with H S L */
+  --popover-foreground: 39 35% 96%;
 
-  --popover-border: red; /*replace with H S L */
+  --popover-border: 24 10% 31%;
 
-  --primary: red; /*replace with H S L */
+  --primary: 39 35% 96%;
 
-  --primary-foreground: red; /*replace with H S L */
+  --primary-foreground: 24 17% 18%;
 
-  --secondary: red; /*replace with H S L */
+  --secondary: 24 12% 28%;
 
-  --secondary-foreground: red; /*replace with H S L */
+  --secondary-foreground: 39 35% 96%;
 
-  --muted: red; /*replace with H S L */
+  --muted: 24 12% 28%;
 
-  --muted-foreground: red; /*replace with H S L */
+  --muted-foreground: 35 15% 70%;
 
-  --accent: red; /*replace with H S L */
+  --accent: 14 31% 62%;
 
-  --accent-foreground: red; /*replace with H S L */
+  --accent-foreground: 24 17% 18%;
 
-  --destructive: red; /*replace with H S L */
+  --destructive: 0 63% 48%;
 
-  --destructive-foreground: red; /*replace with H S L */
+  --destructive-foreground: 0 0% 98%;
 
   /* Used as the border around inputs. Dark mode: Should be a border that is light enough to have high contrast when rendered on a --card background. More contrast than standard --border */
-  --input: red; /*replace with H S L */
-  --ring: red; /*replace with H S L */
-  --chart-1: red; /*replace with H S L */
-  --chart-2: red; /*replace with H S L */
-  --chart-3: red; /*replace with H S L */
-  --chart-4: red; /*replace with H S L */
-  --chart-5: red; /*replace with H S L */
+  --input: 24 10% 31%;
+  --ring: 14 31% 62%;
+  --chart-1: 20 30% 50%;
+  --chart-2: 150 16% 46%;
+  --chart-3: 40 30% 55%;
+  --chart-4: 6 24% 62%;
+  --chart-5: 210 14% 48%;
 
   --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0);
   --shadow-xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0);
@@ -942,4 +942,207 @@ a { color: inherit; text-decoration: none; }
   .preview-confirmation { margin:20px auto; padding:38px 20px; }
   .footer { grid-template-columns:1fr; gap:20px; }
   .footer-copyright { grid-row:auto; }
+}
+
+/* ig.lifestyles — quiet editorial storefront */
+:root {
+  --background: 42 32% 97%;
+  --foreground: 30 8% 14%;
+  --border: 34 15% 86%;
+  --card: 42 35% 99%;
+  --card-foreground: 30 8% 14%;
+  --card-border: 34 15% 86%;
+  --primary: 30 8% 14%;
+  --primary-foreground: 42 32% 97%;
+  --secondary: 36 22% 91%;
+  --secondary-foreground: 30 8% 14%;
+  --muted: 36 22% 91%;
+  --muted-foreground: 28 7% 44%;
+  --accent: 33 24% 79%;
+  --accent-foreground: 30 8% 14%;
+  --input: 34 15% 82%;
+  --ring: 30 8% 28%;
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'DM Sans', sans-serif;
+}
+
+body { background:#f8f6f1; color:#252421; }
+.announcement { background:#e9e4dc; color:#49453f; font-size:9px; letter-spacing:.16em; }
+.header { background:rgba(248,246,241,.96); border-color:#e8e4dc; }
+.nav-wrap { max-width:1600px; height:78px; padding-inline:6vw; }
+.brand {
+  display:inline-flex;
+  align-items:baseline;
+  gap:0;
+  color:#191917;
+  font-family:var(--app-font-sans);
+  font-size:21px;
+  font-weight:300;
+  letter-spacing:-.055em;
+  white-space:nowrap;
+}
+.brand strong { font-size:27px; line-height:1; font-weight:700; letter-spacing:-.085em; }
+.brand span { margin-left:4px; font-size:20px; font-weight:300; letter-spacing:-.045em; }
+.nav-links { color:#33312d; font-size:11px; letter-spacing:.025em; gap:31px; }
+.nav-links a:hover,.footer-links a:hover,.category-nav a:hover { color:#86745e; }
+.cart-link { font-size:11px; letter-spacing:.035em; }
+.category-nav { min-height:40px; background:rgba(248,246,241,.96); border-color:#ebe7e0; color:#4a4741; }
+.page { width:100%; }
+.home-hero {
+  min-height:clamp(540px,62vw,760px);
+  background-image:linear-gradient(90deg, rgba(248,246,241,.94) 0%, rgba(248,246,241,.82) 34%, rgba(248,246,241,.1) 74%, rgba(248,246,241,0) 100%),url("https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2200&q=88");
+  background-position:center 48%;
+}
+.hero-copy { max-width:660px; }
+.eyebrow { color:#82745f; font-size:9px; font-weight:600; letter-spacing:.19em; }
+.hero-copy h1 { max-width:660px; margin:24px 0 25px; font-size:clamp(60px,8vw,104px); font-weight:500; letter-spacing:-.085em; line-height:.94; }
+.hero-copy p { max-width:370px; color:#5d5a53; font-size:14px; line-height:1.85; }
+.button-dark {
+  min-height:48px;
+  padding:14px 21px;
+  border-color:#252421;
+  background:#252421;
+  color:#fbf9f5;
+  font-size:9px;
+  letter-spacing:.13em;
+}
+.button-dark:hover { background:#5e594f; border-color:#5e594f; }
+.button-light { min-height:48px; color:#252421; }
+.category-section { max-width:none; padding:0 5.8vw 60px; }
+.category-strip { grid-template-columns:1fr 1fr 1fr; gap:13px; }
+.category-tile {
+  min-height:clamp(195px,24vw,330px);
+  padding:22px 25px;
+  background-position:center 43%;
+  background-size:cover;
+}
+.category-tile::before { display:none; }
+.category-tile > span:last-child {
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  color:#fffdf9;
+  font-family:var(--app-font-sans);
+  font-size:clamp(20px,2.6vw,32px);
+  font-weight:500;
+  letter-spacing:-.055em;
+  text-shadow:0 1px 8px rgba(20,18,15,.3);
+}
+.category-kids {
+  background:#eae6df !important;
+  color:#282723;
+  background-image:none !important;
+}
+.category-kids > span:last-child { color:#292824; text-shadow:none; }
+.dropping-badge {
+  position:absolute;
+  z-index:2;
+  top:19px;
+  left:20px;
+  display:inline-flex;
+  width:auto !important;
+  padding:7px 10px;
+  border:1px solid rgba(44,41,35,.32);
+  color:#38352f !important;
+  background:rgba(248,246,241,.72);
+  font-family:var(--app-font-sans) !important;
+  font-size:8px !important;
+  font-weight:600 !important;
+  letter-spacing:.14em !important;
+  line-height:1 !important;
+  text-transform:uppercase;
+  text-shadow:none !important;
+}
+.section { max-width:1600px; padding:76px 7vw; }
+.category-section + .section { padding-top:28px; }
+.section-heading { margin-bottom:25px; }
+.section-heading h2,.story-band h2,.newsletter h2,.catalog-head h1,.detail-copy h1,.cart-page h1,.content-page h1 {
+  font-family:var(--app-font-sans);
+  font-weight:500;
+}
+.section-heading h2 { font-size:clamp(34px,4vw,49px); letter-spacing:-.075em; }
+.intro-copy { margin:0; color:#68645d; font-size:13px; }
+.text-link { color:#48443d; border-color:#968a77; }
+.story-band { background:#eeeae3; }
+.story-band h2 { letter-spacing:-.075em; }
+.story-band p { color:#5e5a52; }
+.story-mark { border-color:#d2cbc0; color:#8d8476; font-weight:300; }
+.newsletter { padding:86px 20px 92px; }
+.newsletter h2 { font-size:37px; letter-spacing:-.07em; }
+.newsletter p { color:#656159; }
+.footer { border-color:#e4dfd6; color:#69655e; }
+.footer-brand > span { font-size:10px; }
+.catalog-head { padding-top:76px; }
+.catalog-head h1 { letter-spacing:-.08em; }
+.catalog-tools { border-color:#e6e1d8; }
+.pill { border-color:#d8d2c8; }
+.pill.active { background:#252421; border-color:#252421; }
+.product-grid { max-width:1600px; gap:40px 18px; }
+.product-image { background:#e9e5de; }
+.product-meta { color:#2c2a26; font-size:12px; }
+.product-type { color:#777167; letter-spacing:.035em; }
+.product-view-label { background:rgba(248,246,241,.96); color:#252421; }
+.detail-image { background:#e9e5de; }
+.detail-copy h1 { letter-spacing:-.075em; }
+.option-value.selected { border-color:#252421; background:#252421; }
+.cart-page h1 { letter-spacing:-.08em; }
+.summary { background:#efebe4; }
+.checkout-heading h1,.checkout-section h2,.preview-confirmation h1 { font-family:var(--app-font-sans); font-weight:500; }
+.payment-preview-note { background:#efebe4; color:#423f38; }
+.payment-option.selected { border-color:#252421; }
+.payment-option input { accent-color:#252421; }
+.place-preview-order { text-transform:none; font-size:11px; letter-spacing:.06em; }
+.upi-status { margin:0 !important; padding:14px 16px; border-left:2px solid #736c5f; background:#efebe4; color:#35332e; }
+.kids-coming-soon {
+  min-height:420px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:70px 24px;
+  text-align:center;
+  background:#eeebe5;
+}
+.kids-coming-soon .dropping-badge { position:static; margin:24px 0 5px; }
+.kids-coming-soon h1 { margin:8px 0 10px; font-size:clamp(58px,8vw,86px); font-weight:500; letter-spacing:-.09em; }
+.kids-coming-soon p { margin:0 0 24px; color:#656159; font-size:14px; }
+.kids-coming-soon .text-link { display:inline-flex; align-items:center; gap:7px; }
+[data-reveal] { transform:translateY(11px); transition:opacity .7s ease,transform .7s cubic-bezier(.22,.61,.36,1); }
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible { outline:2px solid #82745f; outline-offset:3px; }
+button:disabled { cursor:not-allowed; }
+@media(max-width:800px) {
+  .nav-wrap { height:63px; padding-inline:17px; }
+  .brand strong { font-size:24px; }
+  .brand span { font-size:17px; }
+  .category-section { padding:0 4vw 43px; }
+  .category-strip { gap:10px; }
+  .category-tile { min-height:210px; padding:17px; }
+  .category-tile > span:last-child { font-size:24px; }
+  .category-section + .section { padding-top:27px; }
+}
+@media(max-width:560px) {
+  .announcement { font-size:7px; letter-spacing:.13em; }
+  .nav-wrap { padding-inline:12px; }
+  .brand { font-size:17px; }
+  .brand strong { font-size:23px; }
+  .brand span { margin-left:3px; font-size:16px; }
+  .nav-links { gap:9px; font-size:9px; }
+  .category-nav { gap:26px; }
+  .home-hero {
+    min-height:520px;
+    background-image:linear-gradient(90deg,rgba(248,246,241,.92),rgba(248,246,241,.55) 62%,rgba(248,246,241,.18)),url("https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=82");
+  }
+  .hero-copy h1 { font-size:58px; }
+  .hero-copy p { max-width:300px; font-size:13px; }
+  .hero-caption { color:#fff; }
+  .category-section { padding:0 16px 36px; }
+  .category-strip { grid-template-columns:1fr; gap:9px; }
+  .category-tile { min-height:135px; padding:16px 18px; }
+  .category-tile > span:last-child { font-size:23px; }
+  .category-tile .dropping-badge { top:13px; left:14px; }
+  .section { padding:57px 6vw; }
+  .footer { gap:17px; }
+  .kids-coming-soon { min-height:380px; }
 }

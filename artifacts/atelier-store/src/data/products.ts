@@ -109,36 +109,6 @@ export const products: StoreProduct[] = [
     options: [{ name: 'Size', values: ['XS', 'S', 'M', 'L'] }, { name: 'Color', values: ['Sand', 'Olive'] }],
     variants: sizes('womens-trousers', 1890, ['XS', 'S', 'M', 'L'], ['Sand', 'Olive']),
   },
-  {
-    id: 'preview-kids-sweatshirt',
-    handle: 'little-everyday-sweatshirt',
-    title: 'Little Everyday Sweatshirt',
-    description: 'A soft cotton-blend layer with an easy shape for school mornings, park afternoons, and everywhere in between.',
-    productType: 'Kids · Layers',
-    category: 'kids',
-    tags: ['soft cotton', 'layers'],
-    images: [
-      image('photo-1519238263530-99bdd11df2ea', 'A child wearing a casual sweatshirt'),
-      image('photo-1503919005314-30d93d07d823', 'A small everyday clothing outfit'),
-    ],
-    options: [{ name: 'Size', values: ['2–3Y', '4–5Y', '6–7Y'] }, { name: 'Color', values: ['Oat', 'Rust'] }],
-    variants: sizes('kids-sweatshirt', 1290, ['2–3Y', '4–5Y', '6–7Y'], ['Oat', 'Rust']),
-  },
-  {
-    id: 'preview-kids-tee',
-    handle: 'little-cotton-tee',
-    title: 'Little Cotton Tee',
-    description: 'A gentle, breathable tee with a comfortable everyday fit. Easy to layer, easy to love, easy to wash.',
-    productType: 'Kids · Tees',
-    category: 'kids',
-    tags: ['cotton', 'everyday'],
-    images: [
-      image('photo-1597892657493-6847b9640bac', 'A child in an everyday cotton tee'),
-      image('photo-1519238263530-99bdd11df2ea', 'A playful kidswear look'),
-    ],
-    options: [{ name: 'Size', values: ['2–3Y', '4–5Y', '6–7Y'] }, { name: 'Color', values: ['Ecru', 'Blue'] }],
-    variants: sizes('kids-tee', 790, ['2–3Y', '4–5Y', '6–7Y'], ['Ecru', 'Blue']),
-  },
 ];
 
 export function getProduct(handle: string) {
