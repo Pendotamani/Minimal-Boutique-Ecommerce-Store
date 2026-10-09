@@ -254,7 +254,14 @@ function ProductPage() {
         <span className="option-label">{option.name}{selected[option.name] ? ` · ${selected[option.name]}` : ''}</span>
         <div className="option-values">{option.values.map((value) => {
           const available = product.variants.some((candidate) => candidate.availableForSale && candidate.selectedOptions.some((choice) => choice.name === option.name && choice.value === value));
-          return <button key={value} type="button" disabled={!available} aria-pressed={selected[option.name] === value} className={`option-value ${selected[option.name] === value ? 'selected' : ''}`} onClick={() => { setSelected((current) => ({ ...current, [option.name]: value })); setAdded(false); }} data-testid={`button-option-${option.name.toLowerCase()}-${value.toLowerCase().replace(/\s+/g, '-')}`}>{value}</button>;
+          return <button key={value} type="button" disabled={!available} aria-pressed={selected[option.name] === value} className={`option-value ${selected[option.name] === value ? 'selected' : ''}`} onClick={() => {
+            setSelected((current) => ({ ...current, [option.name]: value }));
+            if (option.name === 'Color') setActiveImage(Math.min(option.values.indexOf(value), product.images.length - 1));
+            setAdded(false);
+          }} data-testid={`button-option-${option.name.toLowerCase()}-${value.toLowerCase().replace(/\s+/g, '-')}`}>
+            {option.name === 'Color' && <span className={`color-dot color-${value.toLowerCase().replace(/\s+/g, '-')}`} aria-hidden="true" />}
+            {value}
+          </button>;
         })}</div>
       </div>)}
       <div className="detail-actions">
