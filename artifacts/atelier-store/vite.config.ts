@@ -21,14 +21,14 @@ if (Number.isNaN(port) || port <= 0) {
 
 const basePath = process.env.BASE_PATH;
 
-if (!basePath) {
+if (!basePath && process.env.NODE_ENV !== 'production') {
   throw new Error(
     'BASE_PATH environment variable is required but was not provided.',
   );
 }
 
 export default defineConfig({
-  base: basePath,
+  base: basePath || '/',
   plugins: [
     react(),
     tailwindcss(),
