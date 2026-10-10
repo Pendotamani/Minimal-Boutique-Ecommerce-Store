@@ -1,4 +1,4 @@
-export type StoreCategory = 'men' | 'women' | 'kids';
+export type StoreCategory = 'men' | 'women' | 'kids' | 'shoes';
 
 export type ProductOptionValue = {
   name: string;
@@ -32,83 +32,169 @@ export type StoreProduct = {
   variants: ProductVariant[];
 };
 
-const image = (photoId: string, altText: string): ProductImage => ({
-  url: `https://images.unsplash.com/${photoId}?auto=format&fit=crop&w=960&q=82`,
+const sizes = ['S', 'M', 'L', 'XL'];
+const image = (file: string, altText: string): ProductImage => ({
+  url: `${import.meta.env.BASE_URL}assets/products/${file}`,
   altText,
 });
 
-function sizes(prefix: string, price: number, values: string[], colors: string[]): ProductVariant[] {
-  return values.flatMap((size, sizeIndex) => colors.map((color, colorIndex) => ({
-    id: `${prefix}-size-${sizeIndex + 1}-color-${colorIndex + 1}`,
-    title: `${color} / ${size}`,
-    availableForSale: true,
-    price: String(price),
-    currencyCode: 'INR',
-    selectedOptions: [{ name: 'Size', value: size }, { name: 'Color', value: color }],
-  })));
+function makeProduct({
+  handle,
+  title,
+  description,
+  type,
+  price,
+  color,
+  files,
+  tags,
+}: {
+  handle: string;
+  title: string;
+  description: string;
+  type: string;
+  price: number;
+  color: string;
+  files: { file: string; alt: string }[];
+  tags: string[];
+}): StoreProduct {
+  return {
+    id: handle,
+    handle,
+    title,
+    description,
+    productType: `Men · ${type}`,
+    category: 'men',
+    tags,
+    images: files.map(({ file, alt }) => image(file, alt)),
+    options: [{ name: 'Size', values: sizes }, { name: 'Color', values: [color] }],
+    variants: sizes.map((size) => ({
+      id: `${handle}-${size.toLowerCase()}`,
+      title: `${color} / ${size}`,
+      availableForSale: true,
+      price: String(price),
+      currencyCode: 'INR',
+      selectedOptions: [{ name: 'Size', value: size }, { name: 'Color', value: color }],
+    })),
+  };
 }
 
 export const products: StoreProduct[] = [
-  {
-    id: 'preview-mens-overshirt',
-    handle: 'everyday-cotton-overshirt',
-    title: 'Everyday Layering Jacket',
-    description: 'An easy, everyday outer layer with a relaxed shape. Throw it over a tee on cooler mornings or wear it out on its own.',
-    productType: 'Men · Outerwear',
-    category: 'men',
-    tags: ['cotton', 'layering'],
-    images: [
-      image('photo-1591047139829-d91aecb6caea', 'A rust casual jacket hanging on a hanger'),
-      image('photo-1551028719-00167b16eac5', 'A black jacket on a hanger'),
+  makeProduct({
+    handle: 'jacket-black-bsr',
+    title: 'Black BSR Jacket',
+    description: 'A lightweight zip jacket in deep black, finished with a neat stand collar and understated chest crest.',
+    type: 'Jackets',
+    price: 2499,
+    color: 'Black',
+    files: [{ file: 'jacket-black-bsr.jpg', alt: 'Black BSR zip jacket on a neutral backdrop' }],
+    tags: ['jacket', 'zip-up', 'black'],
+  }),
+  makeProduct({
+    handle: 'jacket-white-spsr',
+    title: 'White SPSR Jacket',
+    description: 'A clean white zip jacket with a relaxed everyday fit and a minimal crest detail.',
+    type: 'Jackets',
+    price: 2499,
+    color: 'White',
+    files: [{ file: 'jacket-white-spsr.jpg', alt: 'White SPSR zip jacket on a neutral backdrop' }],
+    tags: ['jacket', 'zip-up', 'white'],
+  }),
+  makeProduct({
+    handle: 'tshirt-super',
+    title: 'Super Graphic Tee',
+    description: 'A charcoal washed tee with a simple bold graphic and an easy, everyday shape.',
+    type: 'T-shirts',
+    price: 999,
+    color: 'Charcoal',
+    files: [{ file: 'tshirt-super.jpg', alt: 'Charcoal washed t-shirt with a Super graphic' }],
+    tags: ['t-shirt', 'graphic', 'charcoal'],
+  }),
+  makeProduct({
+    handle: 'tshirt-la',
+    title: 'LA Graphic Tee',
+    description: 'A soft, dark graphic tee with an easy fit and a laid-back Los Angeles feel.',
+    type: 'T-shirts',
+    price: 999,
+    color: 'Charcoal',
+    files: [
+      { file: 'tshirt-la.jpg', alt: 'Front of a dark Los Angeles graphic tee' },
+      { file: 'tshirt-la-california.jpg', alt: 'Back of a dark California graphic tee' },
     ],
-    options: [{ name: 'Size', values: ['S', 'M', 'L', 'XL'] }, { name: 'Color', values: ['Rust', 'Black'] }],
-    variants: sizes('mens-overshirt', 2490, ['S', 'M', 'L', 'XL'], ['Rust', 'Black']),
-  },
-  {
-    id: 'preview-mens-tee',
-    handle: 'soft-cotton-tee',
-    title: 'Soft Cotton Tee',
-    description: 'An everyday tee in soft-touch cotton with an easy fit and a clean neckline. Made for repeat wear.',
-    productType: 'Men · Tees',
-    category: 'men',
-    tags: ['cotton', 'everyday'],
-    images: [
-      image('photo-1583743814966-8936f37f4678', 'A relaxed cotton t-shirt'),
-      image('photo-1521572163474-6864f9cf17ab', 'A folded white cotton t-shirt'),
+    tags: ['t-shirt', 'graphic', 'la'],
+  }),
+  makeProduct({
+    handle: 'jacket-blue-bsr',
+    title: 'Blue BSR Jacket',
+    description: 'A bright sky-blue layer with a practical zip front, neat collar, and easy everyday fit.',
+    type: 'Jackets',
+    price: 2499,
+    color: 'Blue',
+    files: [{ file: 'jacket-blue-bsr.jpg', alt: 'Sky-blue BSR zip jacket on a neutral backdrop' }],
+    tags: ['jacket', 'zip-up', 'blue'],
+  }),
+  makeProduct({
+    handle: 'tshirt-batman-logo',
+    title: 'Batman Logo Tee',
+    description: 'A black cotton-look tee with a clean bat emblem and understated graphic sleeves.',
+    type: 'T-shirts',
+    price: 1099,
+    color: 'Black',
+    files: [{ file: 'tshirt-batman-logo.jpg', alt: 'Black t-shirt with a white bat logo' }],
+    tags: ['t-shirt', 'graphic', 'batman'],
+  }),
+  makeProduct({
+    handle: 'tshirt-batman-knight',
+    title: 'Batman Knight Tee',
+    description: 'A statement graphic tee with an illustrated front and an all-over dark print.',
+    type: 'T-shirts',
+    price: 1199,
+    color: 'Black',
+    files: [{ file: 'tshirt-batman-knight.jpg', alt: 'Black t-shirt with a Batman Knight illustration' }],
+    tags: ['t-shirt', 'graphic', 'batman'],
+  }),
+  makeProduct({
+    handle: 'jacket-grey-uspa',
+    title: 'Grey USPA Jacket',
+    description: 'A pale grey zip jacket with a clean, versatile shape for everyday layering.',
+    type: 'Jackets',
+    price: 2499,
+    color: 'Grey',
+    files: [{ file: 'jacket-grey-uspa.jpg', alt: 'Pale grey USPA zip jacket on a neutral backdrop' }],
+    tags: ['jacket', 'zip-up', 'grey'],
+  }),
+  makeProduct({
+    handle: 'tshirt-la-california',
+    title: 'LA California Tee',
+    description: 'A dark, washed graphic tee with bold California-inspired lettering and an easy fit.',
+    type: 'T-shirts',
+    price: 1099,
+    color: 'Charcoal',
+    files: [
+      { file: 'tshirt-la-california.jpg', alt: 'Back of a dark California graphic tee' },
+      { file: 'tshirt-la.jpg', alt: 'Front of a dark Los Angeles graphic tee' },
     ],
-    options: [{ name: 'Size', values: ['S', 'M', 'L', 'XL'] }, { name: 'Color', values: ['Natural', 'Sage'] }],
-    variants: sizes('mens-tee', 990, ['S', 'M', 'L', 'XL'], ['Natural', 'Sage']),
-  },
-  {
-    id: 'preview-womens-shirt',
-    handle: 'relaxed-linen-shirt',
-    title: 'Relaxed Linen Shirt',
-    description: 'Light, breathable linen with a gently relaxed fit. An uncomplicated layer for warm afternoons and slower mornings.',
-    productType: 'Women · Shirts',
-    category: 'women',
-    tags: ['linen', 'light layers'],
-    images: [
-      image('photo-1598554747436-c9293d6a588f', 'A softly draped linen shirt'),
-      image('photo-1503341504253-dff4815485f1', 'A light neutral summer outfit'),
-    ],
-    options: [{ name: 'Size', values: ['XS', 'S', 'M', 'L'] }, { name: 'Color', values: ['Ivory', 'Clay'] }],
-    variants: sizes('womens-shirt', 2190, ['XS', 'S', 'M', 'L'], ['Ivory', 'Clay']),
-  },
-  {
-    id: 'preview-womens-trousers',
-    handle: 'everyday-wide-leg-trousers',
-    title: 'Everyday Wide-leg Trousers',
-    description: 'A fluid, easy-to-style trouser with a soft waistband and full-length shape. Comfortable enough to wear all day.',
-    productType: 'Women · Trousers',
-    category: 'women',
-    tags: ['easy fit', 'everyday'],
-    images: [
-      image('photo-1594633312681-425c7b97ccd1', 'Relaxed wide-leg trousers'),
-      image('photo-1483985988355-763728e1935b', 'A neutral everyday wardrobe'),
-    ],
-    options: [{ name: 'Size', values: ['XS', 'S', 'M', 'L'] }, { name: 'Color', values: ['Sand', 'Olive'] }],
-    variants: sizes('womens-trousers', 1890, ['XS', 'S', 'M', 'L'], ['Sand', 'Olive']),
-  },
+    tags: ['t-shirt', 'graphic', 'california'],
+  }),
+  makeProduct({
+    handle: 'tshirt-tribal',
+    title: 'Tribal Graphic Tee',
+    description: 'A charcoal washed tee with a detailed tribal-inspired back graphic.',
+    type: 'T-shirts',
+    price: 1099,
+    color: 'Charcoal',
+    files: [{ file: 'tshirt-tribal.jpg', alt: 'Back of a charcoal t-shirt with a light tribal graphic' }],
+    tags: ['t-shirt', 'graphic', 'tribal'],
+  }),
+  makeProduct({
+    handle: 'pants-bonkers',
+    title: 'Bonkers Relaxed Pants',
+    description: 'A relaxed everyday trouser silhouette with an easy straight leg and a clean finish.',
+    type: 'Trousers',
+    price: 1599,
+    color: 'Black',
+    files: [{ file: 'pants-bonkers.jpg', alt: 'Illustrated placeholder for black relaxed-fit trousers' }],
+    tags: ['pants', 'trousers', 'relaxed fit'],
+  }),
 ];
 
 export function getProduct(handle: string) {

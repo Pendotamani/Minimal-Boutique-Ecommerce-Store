@@ -1,0 +1,6 @@
+attached_assets
+.local
+.git
+.agents
+node_modules
+**/*.log

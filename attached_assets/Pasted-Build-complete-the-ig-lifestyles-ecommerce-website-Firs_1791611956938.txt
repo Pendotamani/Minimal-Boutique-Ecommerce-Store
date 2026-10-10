@@ -1,0 +1,53 @@
+Build/complete the "ig.lifestyles" ecommerce website. First check what already exists in this project — if something below is already built and working, leave it untouched; only build what's missing or broken.
+
+=== BRAND & DESIGN ===
+"ig.lifestyles" — logo: bold lowercase "ig." + thin "lifestyles", black-on-white wordmark. Minimalistic, boutique-style UI (Zara/COS/Aesop-inspired), Amazon-level structure. Neutral palette (off-white, beige, charcoal), clean sans-serif (Inter/Poppins), lots of white space, soft hover/scroll animations, mobile-first.
+
+=== STRUCTURE ===
+- Nav: logo left, minimal links
+- Hero: full-width lifestyle image + tagline
+- Category banners below hero: Men's, Women's, Kids, Shoes
+- Men's: fully populated (products below). Women's, Kids, Shoes: "Dropping Soon" badge, no images yet
+- Product grid: image, name, price, hover shows 2nd image, Add to Cart
+- Product detail page: large images, size/color selector, Add to Cart + Buy Now
+- Footer: newsletter signup, Instagram icon only (@ig.lifestyles), no Facebook
+
+=== MEN'S PRODUCTS (images in /assets/products/) ===
+1. jacket-black-bsr.jpg — Black Bomber Jacket, BSR crest
+2. jacket-white-spsr.jpg — White Bomber Jacket, SPSR crest
+3. tshirt-super.jpg — "SUPER" Graphic Tee (acid wash grey)
+4. tshirt-la.jpg — "Los Angeles" Graphic Tee (smoke print, black)
+5. jacket-blue-bsr.jpg — Sky Blue Bomber Jacket, BSR crest
+6. tshirt-batman-logo.jpg — Batman Logo Tee
+7. tshirt-batman-knight.jpg — Batman White Knight Graphic Tee
+8. jacket-grey-uspa.jpg — Light Grey Bomber Jacket, USPA crest
+9. tshirt-la-california.jpg — "LA California" Graphic Tee (back print)
+10. tshirt-tribal.jpg — Tribal Graphic Tee (back print)
+11. pants-bonkers.jpg — "BONKERS" Wide-Leg Sweatpants
+Each: name, placeholder price, size selector (S/M/L/XL), Add to Cart + Buy Now.
+
+=== CHECKOUT ===
+UPI only (no cards/COD/wallets) — "Pay via UPI" button, "100% Secure Payment" badge. Payment backend logic added later.
+
+=== FIREBASE ===
+const firebaseConfig = {
+  apiKey: "AIzaSyCnkuPRGXkmtcxRsSL8eaXDeY7ddQvB3jo",
+  authDomain: "iglifestyles.firebaseapp.com",
+  projectId: "iglifestyles",
+  storageBucket: "iglifestyles.firebasestorage.app",
+  messagingSenderId: "99691717046",
+  appId: "1:99691717046:web:07a5ea6190949ba9b2e117",
+  measurementId: "G-QSX7XHD013"
+};
+- Firestore "orders" collection: customerName, phoneNumber, address, city, pincode, items[productName,size,color,qty,price], orderDate, orderStatus, totalAmount, paymentStatus
+- Firebase Auth for admin login
+- Cloud Messaging: new order → push notification to admin
+
+=== ADMIN PORTAL (/admin) ===
+Login (Firebase Auth) → real-time order dashboard (status badges: Pending/Confirmed/Shipped/Delivered) → order detail view with status dropdown. Build as installable PWA (manifest.json + service worker) for iOS push notifications via Add to Home Screen.
+
+=== SECURITY (apply last, after everything above works) ===
+Env vars for all server-side secrets (public Firebase client config above is fine as-is). Auth + role-based access on all /admin routes. Sanitize inputs, prevent XSS. Rate limiting on API endpoints. Secure CORS. Security headers (CSP, HSTS, X-Frame-Options). Debug mode off. Update/remove unused dependencies. Check for exposed .env/.git files. Hash passwords (bcrypt/argon2) if using custom auth. Check git history for leaked secrets. Full security audit before deployment.
+
+=== REPORT BACK ===
+What already existed vs. what you built/fixed. Whether Men's products render correctly. Whether admin login works (state the exact email/password it expects). Whether Firebase is connected and functional. Which security items were applied vs. skipped (and why). Final build status — does it run with zero errors.

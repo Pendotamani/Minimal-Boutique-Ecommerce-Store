@@ -20,8 +20,14 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AdminDevice,
+  AdminDeviceInput,
   GetStoreProductsParams,
   HealthStatus,
+  OrderCreated,
+  OrderInput,
+  OrderStatusResult,
+  OrderStatusUpdate,
   StoreCart,
   StoreCartInput,
   StoreCartLineInput,
@@ -133,6 +139,271 @@ export function useHealthCheck<TData = Awaited<ReturnType<typeof healthCheck>>, 
 
 
 
+
+export const getCreateOrderUrl = () => {
+
+
+
+
+  return `/api/orders`
+}
+
+/**
+ * @summary Create a pending UPI order
+ */
+export const createOrder = async (orderInput: OrderInput, options?: Parameters<typeof customFetch>[1]): Promise<OrderCreated> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<OrderCreated>(getCreateOrderUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(orderInput)
+  }
+);}
+
+
+
+
+
+export const getCreateOrderMutationKey = () => ['createOrder'] as const;
+
+export const getCreateOrderMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,CreateOrderMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,CreateOrderMutationVariables, TContext> => {
+
+const mutationKey = getCreateOrderMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrder>>, CreateOrderMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  createOrder(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateOrderMutationResult = NonNullable<Awaited<ReturnType<typeof createOrder>>>
+    export type CreateOrderMutationBody = BodyType<OrderInput>
+    export type CreateOrderMutationError = ErrorType<void>
+    export type CreateOrderMutationVariables = {data: BodyType<OrderInput>}
+
+    /**
+ * @summary Create a pending UPI order
+ */
+export const useCreateOrder = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,CreateOrderMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createOrder>>,
+        TError,
+        CreateOrderMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCreateOrderMutationOptions(options));
+    }
+
+export const getRegisterAdminDeviceUrl = () => {
+
+
+
+
+  return `/api/admin/devices`
+}
+
+/**
+ * @summary Register an authenticated admin device for push notifications
+ */
+export const registerAdminDevice = async (adminDeviceInput: AdminDeviceInput, options?: Parameters<typeof customFetch>[1]): Promise<AdminDevice> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AdminDevice>(getRegisterAdminDeviceUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(adminDeviceInput)
+  }
+);}
+
+
+
+
+
+export const getRegisterAdminDeviceMutationKey = () => ['registerAdminDevice'] as const;
+
+export const getRegisterAdminDeviceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerAdminDevice>>, TError,RegisterAdminDeviceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof registerAdminDevice>>, TError,RegisterAdminDeviceMutationVariables, TContext> => {
+
+const mutationKey = getRegisterAdminDeviceMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerAdminDevice>>, RegisterAdminDeviceMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  registerAdminDevice(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RegisterAdminDeviceMutationResult = NonNullable<Awaited<ReturnType<typeof registerAdminDevice>>>
+    export type RegisterAdminDeviceMutationBody = BodyType<AdminDeviceInput>
+    export type RegisterAdminDeviceMutationError = ErrorType<void>
+    export type RegisterAdminDeviceMutationVariables = {data: BodyType<AdminDeviceInput>}
+
+    /**
+ * @summary Register an authenticated admin device for push notifications
+ */
+export const useRegisterAdminDevice = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerAdminDevice>>, TError,RegisterAdminDeviceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof registerAdminDevice>>,
+        TError,
+        RegisterAdminDeviceMutationVariables,
+        TContext
+      > => {
+      return useMutation(getRegisterAdminDeviceMutationOptions(options));
+    }
+
+export const getUpdateAdminOrderStatusUrl = (orderId: string,) => {
+
+
+
+
+  return `/api/admin/orders/${orderId}`
+}
+
+/**
+ * @summary Update an order status as an authenticated admin
+ */
+export const updateAdminOrderStatus = async (orderId: string,
+    orderStatusUpdate: OrderStatusUpdate, options?: Parameters<typeof customFetch>[1]): Promise<OrderStatusResult> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<OrderStatusResult>(getUpdateAdminOrderStatusUrl(orderId),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(orderStatusUpdate)
+  }
+);}
+
+
+
+
+
+export const getUpdateAdminOrderStatusMutationKey = () => ['updateAdminOrderStatus'] as const;
+
+export const getUpdateAdminOrderStatusMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdminOrderStatus>>, TError,UpdateAdminOrderStatusMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAdminOrderStatus>>, TError,UpdateAdminOrderStatusMutationVariables, TContext> => {
+
+const mutationKey = getUpdateAdminOrderStatusMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAdminOrderStatus>>, UpdateAdminOrderStatusMutationVariables> = (props) => {
+          const {orderId,data} = props ?? {};
+
+          return  updateAdminOrderStatus(orderId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAdminOrderStatusMutationResult = NonNullable<Awaited<ReturnType<typeof updateAdminOrderStatus>>>
+    export type UpdateAdminOrderStatusMutationBody = BodyType<OrderStatusUpdate>
+    export type UpdateAdminOrderStatusMutationError = ErrorType<void>
+    export type UpdateAdminOrderStatusMutationVariables = {orderId: string;data: BodyType<OrderStatusUpdate>}
+
+    /**
+ * @summary Update an order status as an authenticated admin
+ */
+export const useUpdateAdminOrderStatus = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdminOrderStatus>>, TError,UpdateAdminOrderStatusMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateAdminOrderStatus>>,
+        TError,
+        UpdateAdminOrderStatusMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUpdateAdminOrderStatusMutationOptions(options));
+    }
 
 export const getGetStoreProductsUrl = (params?: GetStoreProductsParams,) => {
   const normalizedParams = new URLSearchParams();

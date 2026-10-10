@@ -5,6 +5,127 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export type OrderLineInputSize = typeof OrderLineInputSize[keyof typeof OrderLineInputSize];
+
+
+export const OrderLineInputSize = {
+  S: 'S',
+  M: 'M',
+  L: 'L',
+  XL: 'XL',
+} as const;
+
+export interface OrderLineInput {
+  /**
+     * @minLength 1
+     * @maxLength 64
+     */
+  productId: string;
+  size: OrderLineInputSize;
+  /**
+     * @minimum 1
+     * @maximum 10
+     */
+  quantity: number;
+}
+
+export interface OrderInput {
+  /**
+     * @minLength 1
+     * @maxLength 100
+     */
+  customerName: string;
+  /** @maxLength 254 */
+  email?: string;
+  /** @pattern ^[6-9][0-9]{9}$ */
+  phoneNumber: string;
+  /**
+     * @minLength 5
+     * @maxLength 300
+     */
+  address: string;
+  /**
+     * @minLength 1
+     * @maxLength 80
+     */
+  city: string;
+  /** @pattern ^[1-9][0-9]{5}$ */
+  pincode: string;
+  /**
+     * @minItems 1
+     * @maxItems 20
+     */
+  items: OrderLineInput[];
+}
+
+export interface OrderItem {
+  productId: string;
+  productName: string;
+  size: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+}
+
+export type OrderCreatedPaymentStatus = typeof OrderCreatedPaymentStatus[keyof typeof OrderCreatedPaymentStatus];
+
+
+export const OrderCreatedPaymentStatus = {
+  pending: 'pending',
+} as const;
+
+export interface OrderCreated {
+  orderId: string;
+  totalAmount: number;
+  paymentStatus: OrderCreatedPaymentStatus;
+  upiUrl: string;
+}
+
+export interface AdminDeviceInput {
+  /**
+     * @minLength 20
+     * @maxLength 5000
+     */
+  token: string;
+}
+
+export interface AdminDevice {
+  registered: boolean;
+}
+
+export type OrderStatusUpdateOrderStatus = typeof OrderStatusUpdateOrderStatus[keyof typeof OrderStatusUpdateOrderStatus];
+
+
+export const OrderStatusUpdateOrderStatus = {
+  new: 'new',
+  confirmed: 'confirmed',
+  processing: 'processing',
+  shipped: 'shipped',
+  delivered: 'delivered',
+  cancelled: 'cancelled',
+} as const;
+
+export interface OrderStatusUpdate {
+  orderStatus: OrderStatusUpdateOrderStatus;
+}
+
+export type OrderStatusResultOrderStatus = typeof OrderStatusResultOrderStatus[keyof typeof OrderStatusResultOrderStatus];
+
+
+export const OrderStatusResultOrderStatus = {
+  new: 'new',
+  confirmed: 'confirmed',
+  processing: 'processing',
+  shipped: 'shipped',
+  delivered: 'delivered',
+  cancelled: 'cancelled',
+} as const;
+
+export interface OrderStatusResult {
+  orderId: string;
+  orderStatus: OrderStatusResultOrderStatus;
+}
+
 export interface HealthStatus {
   status: string;
 }
@@ -103,5 +224,6 @@ export const GetStoreProductsCategory = {
   men: 'men',
   women: 'women',
   kids: 'kids',
+  shoes: 'shoes',
 } as const;
 

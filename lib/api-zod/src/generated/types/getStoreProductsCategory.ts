@@ -13,4 +13,5 @@ export const GetStoreProductsCategory = {
   men: 'men',
   women: 'women',
   kids: 'kids',
+  shoes: 'shoes',
 } as const;

@@ -2,11 +2,14 @@ import { type FormEvent, type ReactNode, createContext, useContext, useEffect, u
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { products, getProduct, getProducts, type ProductVariant, type StoreCategory, type StoreProduct } from '@/data/products';
+import AdminPage from '@/pages/admin';
+import { createOrder } from '@workspace/api-client-react';
+import type { OrderInput } from '@workspace/api-client-react';
 import { useForm } from 'react-hook-form';
 import { ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, Check, Instagram, LockKeyhole, Mail, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { Link, Route, Switch, useLocation, useParams, Router as WouterRouter } from 'wouter';
 
-const CART_STORAGE_KEY = 'atelier-preview-cart';
+const CART_STORAGE_KEY = 'iglifestyles-cart-v2';
 
 type CartLine = {
   id: string;
@@ -14,6 +17,7 @@ type CartLine = {
   handle: string;
   title: string;
   variantTitle: string;
+  size: string;
   image: string;
   quantity: number;
   unitPrice: number;
@@ -43,11 +47,9 @@ function money(amount: number) {
 
 function SiteHeader() {
   const { count } = useCart();
-  return <>
-    <div className="announcement">A considered wardrobe for every day</div>
-    <header className="header">
+  return <header className="header">
       <div className="nav-wrap">
-        <Link href="/" className="brand" aria-label="ig.lifestyles home" data-testid="link-home"><strong>ig.</strong><span>lifestyles</span></Link>
+        <Link href="/" className="brand brand-mark" aria-label="ig.lifestyles home" data-testid="link-home"><img src={`${import.meta.env.BASE_URL}ig-lifestyles-wordmark.png`} alt="ig. lifestyles" /></Link>
         <nav className="nav-links" aria-label="Main navigation">
           <Link href="/" data-testid="link-nav-home">Home</Link>
           <Link href="/shop" data-testid="link-nav-shop">Shop</Link>
@@ -59,13 +61,7 @@ function SiteHeader() {
           <span>Bag{count > 0 ? ` (${count})` : ''}</span>
         </Link>
       </div>
-      <nav className="category-nav" aria-label="Shop by category">
-        <Link href="/shop/men" data-testid="link-category-men">Men’s</Link>
-        <Link href="/shop/women" data-testid="link-category-women">Women’s</Link>
-        <Link href="/shop/kids" data-testid="link-category-kids">Kids</Link>
-      </nav>
-    </header>
-  </>;
+    </header>;
 }
 
 function Newsletter() {
@@ -93,7 +89,7 @@ function Newsletter() {
 function SiteFooter() {
   return <footer className="footer">
     <div className="footer-brand">
-      <Link href="/" className="brand" data-testid="footer-link-home"><strong>ig.</strong><span>lifestyles</span></Link>
+      <Link href="/" className="brand brand-mark" data-testid="footer-link-home"><img src={`${import.meta.env.BASE_URL}ig-lifestyles-wordmark.png`} alt="ig. lifestyles" /></Link>
       <span>Considered clothes for real life.</span>
     </div>
     <nav className="footer-links" aria-label="Footer navigation">
@@ -112,12 +108,26 @@ function ProductCard({ product }: { product: StoreProduct }) {
   const image = product.images[0];
   const secondImage = product.images[1] ?? image;
   const price = Number(product.variants[0]?.price ?? 0);
+  const quickAddVariant = product.variants.find((variant) =>
+    variant.selectedOptions.some((option) => option.name === 'Size' && option.value === 'M'),
+  ) ?? product.variants[0];
+  const { addItem } = useCart();
+  const [added, setAdded] = useState(false);
   return <article className="product-card" data-reveal data-testid={`card-product-${product.id}`}>
-    <Link href={`/product/${product.handle}`} className="product-image" data-testid={`link-product-${product.handle}`}>
-      {image && <img className="product-image-primary" src={image.url} alt={image.altText || product.title} loading="lazy" data-testid={`img-product-${product.id}`} />}
-      {secondImage && <img className="product-image-secondary" src={secondImage.url} alt="" loading="lazy" aria-hidden="true" />}
-      <span className="product-view-label">View piece <ArrowUpRight size={13} /></span>
-    </Link>
+    <div className="product-image-wrap">
+      <Link href={`/product/${product.handle}`} className="product-image" data-testid={`link-product-${product.handle}`}>
+        {image && <img className="product-image-primary" src={image.url} alt={image.altText || product.title} loading="lazy" data-testid={`img-product-${product.id}`} />}
+        {secondImage && <img className="product-image-secondary" src={secondImage.url} alt="" loading="lazy" aria-hidden="true" />}
+        <span className="product-view-label">View piece <ArrowUpRight size={13} /></span>
+      </Link>
+      <button type="button" className="product-quick-add" disabled={!quickAddVariant} onClick={() => {
+        if (!quickAddVariant) return;
+        addItem(product, quickAddVariant);
+        setAdded(true);
+      }} aria-label={`Add ${product.title} in size M to bag`} data-testid={`button-quick-add-${product.id}`}>
+        {added ? <><Check size={14} /> Added</> : <>Add to bag · M <ShoppingBag size={14} /></>}
+      </button>
+    </div>
     <div className="product-meta">
       <Link href={`/product/${product.handle}`} data-testid={`text-product-title-${product.id}`}>{product.title}</Link>
       <span data-testid={`text-product-price-${product.id}`}>{money(price)}</span>
@@ -131,7 +141,7 @@ function ProductGrid({ items, emptyTitle }: { items: StoreProduct[]; emptyTitle:
     return <div className="empty-state" data-testid="status-catalog-empty">
       <span className="eyebrow">A little space for what’s next</span>
       <h2>{emptyTitle}</h2>
-      <p>We couldn’t find a piece to match. Try another search or browse a different part of Atelier.</p>
+      <p>We couldn’t find a piece to match. Try another search or browse the ig.lifestyles collection.</p>
       <Link className="text-link" href="/shop" data-testid="link-empty-reset">Explore the full collection <ArrowRight size={13} /></Link>
     </div>;
   }
@@ -141,9 +151,10 @@ function ProductGrid({ items, emptyTitle }: { items: StoreProduct[]; emptyTitle:
 function HomePage() {
   const featured = getProducts({ limit: 4 });
   const categoryTiles: { category: StoreCategory; label: string; image?: string }[] = [
-    { category: 'men', label: 'Men’s', image: 'photo-1618354691373-d851c5c3a990' },
-    { category: 'women', label: 'Women’s', image: 'photo-1515886657613-9f3515b0c78f' },
+    { category: 'men', label: 'Men’s', image: products[0]?.images[0]?.url },
+    { category: 'women', label: 'Women’s' },
     { category: 'kids', label: 'Kids' },
+    { category: 'shoes', label: 'Shoes' },
   ];
 
   return <main className="page">
@@ -159,16 +170,16 @@ function HomePage() {
     <section className="section category-section" aria-label="Shop by category">
       <div className="category-strip">
         {categoryTiles.map(({ category, label, image }) => <Link
-          key={category}
-          href={`/shop/${category}`}
-          className={`category-tile category-${category}`}
-          style={image ? { backgroundImage: `linear-gradient(0deg, rgba(34, 28, 23, .42), transparent 63%), url(https://images.unsplash.com/${image}?auto=format&fit=crop&w=960&q=82)` } : undefined}
-          data-testid={`tile-category-${category}`}
-          data-reveal
-        >
-          {category === 'kids' && <span className="dropping-badge">Dropping soon</span>}
-          <span>{label} <ArrowDownRight size={16} /></span>
-        </Link>)}
+            key={category}
+            href={`/shop/${category}`}
+            className={`category-tile category-${category}`}
+            style={image ? { backgroundImage: `linear-gradient(0deg, rgba(20, 20, 18, .56), rgba(20, 20, 18, .05) 75%), url(${image})` } : undefined}
+            data-testid={`tile-category-${category}`}
+            data-reveal
+          >
+            {category !== 'men' && <span className="dropping-badge">Dropping Soon</span>}
+            <span className="category-label">{label} <ArrowDownRight size={16} /></span>
+          </Link>)}
       </div>
     </section>
     <section className="section">
@@ -196,22 +207,31 @@ function HomePage() {
 function ShopPage({ category }: { category?: StoreCategory }) {
   const [search, setSearch] = useState('');
   const items = useMemo(() => getProducts({ category, search, limit: 50 }), [category, search]);
-  if (category === 'kids') return <main className="page kids-coming-soon" data-testid="status-kids-dropping-soon">
-    <span className="eyebrow">A little more time</span>
-    <span className="dropping-badge">Dropping soon</span>
-    <h1>Kids</h1>
-    <p>Everyday pieces for little lives are on their way.</p>
-    <Link href="/shop" className="text-link" data-testid="link-kids-back-shop"><ArrowLeft size={13} /> Explore what’s here</Link>
-  </main>;
-  const title = category ? { men: 'Men', women: 'Women', kids: 'Kids' }[category] : 'All essentials';
+  if (category && category !== 'men') {
+    const label = { women: 'Women’s', kids: 'Kids', shoes: 'Shoes' }[category];
+    const copy = category === 'kids'
+      ? 'Everyday pieces for little lives are on their way.'
+      : category === 'shoes'
+        ? 'A considered collection of everyday shoes is on its way.'
+        : 'A considered women’s collection is on its way.';
+    return <main className={`page kids-coming-soon coming-soon-${category}`} data-testid={`status-${category}-dropping-soon`}>
+      <span className="eyebrow">A little more time</span>
+      <span className="dropping-badge">Dropping Soon</span>
+      <h1>{label}</h1>
+      <p>{copy}</p>
+      <Link href="/shop/men" className="text-link" data-testid={`link-${category}-back-shop`}><ArrowLeft size={13} /> Explore Men’s</Link>
+    </main>;
+  }
+  const title = category === 'men' ? 'Men’s collection' : 'All essentials';
   return <main className="page">
-    <section className="catalog-head" data-reveal><span className="eyebrow">The ig.lifestyles collection</span><h1>{title}</h1><p>Easy pieces for every day, thoughtfully chosen for real life.</p></section>
+    <section className="catalog-head" data-reveal><span className="eyebrow">The ig.lifestyles collection</span><h1>{title}</h1><p>Easy pieces for every day, thoughtfully chosen for real life. Preview prices are placeholders.</p></section>
     <div className="catalog-tools">
       <nav className="category-pills" aria-label="Shop by category">
         <Link className={`pill ${!category ? 'active' : ''}`} href="/shop" data-testid="filter-category-all">Everything</Link>
         <Link className={`pill ${category === 'men' ? 'active' : ''}`} href="/shop/men" data-testid="filter-category-men">Men</Link>
         <Link className={`pill ${category === 'women' ? 'active' : ''}`} href="/shop/women" data-testid="filter-category-women">Women</Link>
         <Link className={`pill ${category === 'kids' ? 'active' : ''}`} href="/shop/kids" data-testid="filter-category-kids">Kids</Link>
+        <Link className={`pill ${category === 'shoes' ? 'active' : ''}`} href="/shop/shoes" data-testid="filter-category-shoes">Shoes</Link>
       </nav>
       <label className="search-wrap"><span className="sr-only">Search the collection</span><input className="search-input" type="search" placeholder="Search the collection" value={search} onChange={(event) => setSearch(event.target.value)} data-testid="input-product-search" /></label>
     </div>
@@ -280,7 +300,7 @@ function ProductPage() {
         <button className="button-dark detail-add" onClick={addToBag} disabled={!variant} data-testid="button-add-to-bag">{added ? <><Check size={15} /> Added to your bag</> : <>Add to bag <ShoppingBag size={15} /> </>}</button>
         <button className="button-light detail-buy" onClick={buyNow} disabled={!variant} data-testid="button-buy-now">Buy now <ArrowRight size={14} /></button>
       </div>
-      <p className="preview-inline-note"><LockKeyhole size={14} /> Checkout is a preview. No payment will be collected.</p>
+      <p className="preview-inline-note"><LockKeyhole size={14} /> UPI only. Order payment stays pending until provider verification is connected.</p>
       {added && <Link className="text-link view-bag-link" href="/cart" data-testid="link-view-bag">View your bag <ArrowRight size={13} /></Link>}
     </section>
   </main>;
@@ -318,9 +338,9 @@ function CartPage() {
         <h2>Order summary</h2>
         <div className="summary-row"><span>Subtotal</span><strong data-testid="text-cart-subtotal">{money(subtotal)}</strong></div>
         <div className="summary-row"><span>Shipping</span><strong>{shipping === 0 ? 'Complimentary' : money(shipping)}</strong></div>
-        <p className="summary-note">Shipping is complimentary on preview orders over ₹3,000. Taxes and final delivery details are not configured.</p>
+        <p className="summary-note">Shipping is complimentary on orders over ₹3,000.</p>
         <Link href="/checkout" className="button-dark checkout-button" data-testid="link-preview-checkout">Continue to checkout <ArrowRight size={15} /></Link>
-        <p className="preview-inline-note"><LockKeyhole size={14} /> Preview only · no payment is processed</p>
+        <p className="preview-inline-note"><LockKeyhole size={14} /> UPI payment only</p>
       </aside>
     </div>
   </main>;
@@ -337,7 +357,8 @@ type CheckoutValues = {
 
 function CheckoutPage() {
   const { items, subtotal } = useCart();
-  const [upiNotice, setUpiNotice] = useState(false);
+  const [upiNotice, setUpiNotice] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const form = useForm<CheckoutValues>({
     defaultValues: { name: '', email: '', phone: '', address: '', city: '', pin: '' },
   });
@@ -347,11 +368,38 @@ function CheckoutPage() {
   const shipping = subtotal >= 3000 ? 0 : 99;
   const total = subtotal + shipping;
 
+  const submitOrder = form.handleSubmit(async (values) => {
+    setSubmitting(true);
+    setUpiNotice('');
+    const payload: OrderInput = {
+      customerName: values.name.trim(),
+      email: values.email.trim(),
+      phoneNumber: values.phone.trim(),
+      address: values.address.trim(),
+      city: values.city.trim(),
+      pincode: values.pin.trim(),
+      items: items.map((item) => ({
+        productId: item.productId,
+        size: item.size as OrderInput['items'][number]['size'],
+        quantity: item.quantity,
+      })),
+    };
+    try {
+      const order = await createOrder(payload);
+      setUpiNotice(`Order ${order.orderId} is ready. Payment is pending until your UPI provider confirms it.`);
+      window.location.assign(order.upiUrl);
+    } catch (error) {
+      setUpiNotice(error instanceof Error ? error.message : 'We could not create the order. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
   return <main className="checkout-page">
-    <div className="checkout-heading"><Link href="/cart" className="text-link" data-testid="link-checkout-back"><ArrowLeft size={13} /> Back to your bag</Link><h1>Checkout</h1><p>Review your delivery details, then continue to UPI. This preview does not accept orders or collect payment.</p></div>
+    <div className="checkout-heading"><Link href="/cart" className="text-link" data-testid="link-checkout-back"><ArrowLeft size={13} /> Back to your bag</Link><h1>Checkout</h1><p>Enter your delivery details, then continue to your UPI app.</p></div>
     <div className="checkout-layout">
       <Form {...form}>
-        <form className="checkout-form" onSubmit={(event) => event.preventDefault()} noValidate>
+        <form className="checkout-form" onSubmit={submitOrder} noValidate>
           <section className="checkout-section">
             <span className="eyebrow">01 · Delivery details</span>
             <h2>Where should we send it?</h2>
@@ -367,11 +415,11 @@ function CheckoutPage() {
           <section className="checkout-section payment-section">
             <span className="eyebrow">02 · UPI</span>
             <h2>Pay via UPI</h2>
-            <div className="payment-preview-note"><LockKeyhole size={18} /><div><strong>UPI processing is not connected</strong><span>No payment credentials are requested. Continuing will not charge you or create an order.</span></div></div>
+            <div className="payment-preview-note"><LockKeyhole size={18} /><div><strong>100% Secure Payment</strong><span>Your UPI app handles payment details. We never ask for your UPI PIN; payment verification is not connected yet.</span></div></div>
           </section>
-          <button type="button" className="button-dark place-preview-order" onClick={() => setUpiNotice(true)} data-testid="button-pay-via-upi">Pay via UPI <ArrowRight size={15} /></button>
-          {upiNotice && <p className="checkout-disclaimer upi-status" role="status" data-testid="status-upi-not-connected">UPI processing is not connected. No charge was made and no order was placed.</p>}
-          <p className="checkout-disclaimer">This is a storefront preview. Delivery details stay in this browser and are not submitted.</p>
+          <button type="submit" className="button-dark place-preview-order" disabled={submitting} data-testid="button-pay-via-upi">{submitting ? 'Preparing secure UPI checkout…' : <>Pay via UPI <ArrowRight size={15} /></>}</button>
+          {upiNotice && <p className="checkout-disclaimer upi-status" role="status" data-testid="status-upi-result">{upiNotice}</p>}
+          <p className="checkout-disclaimer">Payment status stays pending until a provider verification callback is connected. We do not collect card, COD, or UPI PIN details.</p>
         </form>
       </Form>
       <aside className="summary checkout-summary">
@@ -437,6 +485,7 @@ function StoreLayout({ children }: { children: ReactNode }) {
             && typeof item?.handle === 'string'
             && typeof item?.title === 'string'
             && typeof item?.variantTitle === 'string'
+            && typeof item?.size === 'string'
             && typeof item?.image === 'string'
             && Number.isInteger(item?.quantity)
             && typeof item?.unitPrice === 'number',
@@ -484,6 +533,7 @@ function StoreLayout({ children }: { children: ReactNode }) {
         handle: product.handle,
         title: product.title,
         variantTitle: variant.selectedOptions.map((option) => option.value).join(' · ') || variant.title,
+        size: variant.selectedOptions.find((option) => option.name === 'Size')?.value ?? 'M',
         image: product.images[0]?.url ?? '',
         quantity: (existing?.quantity ?? 0) + 1,
         unitPrice: Number(variant.price),
@@ -501,12 +551,15 @@ function StoreLayout({ children }: { children: ReactNode }) {
 }
 
 function Router() {
+  const [location] = useLocation();
+  if (location === '/admin' || location.startsWith('/admin/')) return <AdminPage />;
   return <StoreLayout><Switch>
     <Route path="/" component={HomePage} />
     <Route path="/shop" component={() => <ShopPage />} />
     <Route path="/shop/men" component={() => <ShopPage category="men" />} />
     <Route path="/shop/women" component={() => <ShopPage category="women" />} />
     <Route path="/shop/kids" component={() => <ShopPage category="kids" />} />
+    <Route path="/shop/shoes" component={() => <ShopPage category="shoes" />} />
     <Route path="/product/:handle" component={ProductPage} />
     <Route path="/cart" component={CartPage} />
     <Route path="/checkout" component={CheckoutPage} />

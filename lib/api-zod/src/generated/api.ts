@@ -18,6 +18,88 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
+ * @summary Create a pending UPI order
+ */
+export const createOrderBodyCustomerNameMax = 100;
+
+export const createOrderBodyEmailMax = 254;
+
+export const createOrderBodyPhoneNumberRegExp = new RegExp('^[6-9][0-9]{9}$');
+export const createOrderBodyAddressMin = 5;
+export const createOrderBodyAddressMax = 300;
+
+export const createOrderBodyCityMax = 80;
+
+export const createOrderBodyPincodeRegExp = new RegExp('^[1-9][0-9]{5}$');
+export const createOrderBodyItemsItemProductIdMax = 64;
+
+export const createOrderBodyItemsItemQuantityMax = 10;
+
+export const createOrderBodyItemsMax = 20;
+
+
+
+export const CreateOrderBody = zod.object({
+  "customerName": zod.string().min(1).max(createOrderBodyCustomerNameMax),
+  "email": zod.string().email().max(createOrderBodyEmailMax).optional(),
+  "phoneNumber": zod.string().regex(createOrderBodyPhoneNumberRegExp),
+  "address": zod.string().min(createOrderBodyAddressMin).max(createOrderBodyAddressMax),
+  "city": zod.string().min(1).max(createOrderBodyCityMax),
+  "pincode": zod.string().regex(createOrderBodyPincodeRegExp),
+  "items": zod.array(zod.object({
+  "productId": zod.string().min(1).max(createOrderBodyItemsItemProductIdMax),
+  "size": zod.enum(['S', 'M', 'L', 'XL']),
+  "quantity": zod.number().int().min(1).max(createOrderBodyItemsItemQuantityMax)
+})).min(1).max(createOrderBodyItemsMax)
+})
+
+export const CreateOrderResponse = zod.object({
+  "orderId": zod.string(),
+  "totalAmount": zod.number().int(),
+  "paymentStatus": zod.enum(['pending']),
+  "upiUrl": zod.string().url()
+})
+
+
+/**
+ * @summary Register an authenticated admin device for push notifications
+ */
+export const registerAdminDeviceBodyTokenMin = 20;
+export const registerAdminDeviceBodyTokenMax = 5000;
+
+
+
+export const RegisterAdminDeviceBody = zod.object({
+  "token": zod.string().min(registerAdminDeviceBodyTokenMin).max(registerAdminDeviceBodyTokenMax)
+})
+
+export const RegisterAdminDeviceResponse = zod.object({
+  "registered": zod.boolean()
+})
+
+
+/**
+ * @summary Update an order status as an authenticated admin
+ */
+export const updateAdminOrderStatusPathOrderIdMax = 128;
+
+
+
+export const UpdateAdminOrderStatusParams = zod.object({
+  "orderId": zod.coerce.string().min(1).max(updateAdminOrderStatusPathOrderIdMax)
+})
+
+export const UpdateAdminOrderStatusBody = zod.object({
+  "orderStatus": zod.enum(['new', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])
+})
+
+export const UpdateAdminOrderStatusResponse = zod.object({
+  "orderId": zod.string(),
+  "orderStatus": zod.enum(['new', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])
+})
+
+
+/**
  * @summary List products available to the storefront
  */
 export const getStoreProductsQueryLimitMax = 50;
@@ -25,7 +107,7 @@ export const getStoreProductsQueryLimitMax = 50;
 
 
 export const GetStoreProductsQueryParams = zod.object({
-  "category": zod.enum(['men', 'women', 'kids']).optional(),
+  "category": zod.enum(['men', 'women', 'kids', 'shoes']).optional(),
   "search": zod.coerce.string().optional(),
   "limit": zod.coerce.number().int().min(1).max(getStoreProductsQueryLimitMax).optional()
 })

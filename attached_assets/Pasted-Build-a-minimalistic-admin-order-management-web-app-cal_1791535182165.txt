@@ -1,0 +1,50 @@
+Build a minimalistic admin/order management web app called "ig.lifestyles Portal" using Firebase as the backend.
+
+Use this exact Firebase configuration:
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCnkuPRGXkmtcxRsSL8eaXDeY7ddQvB3jo",
+  authDomain: "iglifestyles.firebaseapp.com",
+  projectId: "iglifestyles",
+  storageBucket: "iglifestyles.firebasestorage.app",
+  messagingSenderId: "99691717046",
+  appId: "1:99691717046:web:07a5ea6190949ba9b2e117",
+  measurementId: "G-QSX7XHD013"
+};
+
+Tech requirements:
+- Firebase Authentication (email/password login)
+- Firestore Database (real-time order data)
+- Firebase Cloud Messaging (push notifications for new orders)
+- Build as a PWA (installable on iOS/Android home screen) since the client uses an iPhone
+
+UI style: Clean, minimal, neutral color palette (off-white, beige, soft black/charcoal), simple sans-serif typography (Inter or Poppins), mobile-first since client will use this mainly on her phone.
+
+Screens needed:
+
+1. Login Screen
+- Email/password login via Firebase Auth
+- "ig.lifestyles Portal" title/logo
+
+2. Dashboard / Order List Screen
+- Real-time order list from Firestore "orders" collection, newest first
+- Each card: customer name, item name + thumbnail, status badge (Pending/Confirmed/Shipped/Delivered — color coded), order date/time
+- Push notification alert on new order via FCM
+- Search/filter by status or customer name
+
+3. Order Detail Screen
+- Customer details: name, phone, address, city, pincode
+- Item details: product name, size, color, qty, price, total amount
+- Payment status (Paid via UPI / Pending)
+- Status dropdown to update order progress, synced to Firestore in real time
+- Order timestamp
+
+4. Settings Screen
+- Business profile info
+- Notification toggle
+- Logout
+
+Firestore "orders" collection structure:
+customerName, phoneNumber, address, city, pincode, items (array: productName, size, color, qty, price), orderDate (timestamp), orderStatus, totalAmount, paymentStatus
+
+Make it installable as a PWA with proper manifest.json and service worker so push notifications work on iOS Safari after "Add to Home Screen."
