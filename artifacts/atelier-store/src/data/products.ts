@@ -67,14 +67,18 @@ function makeProduct({
     tags,
     images: files.map(({ file, alt }) => image(file, alt)),
     options: [{ name: 'Size', values: sizes }, { name: 'Color', values: [color] }],
-    variants: sizes.map((size) => ({
-      id: `${handle}-${size.toLowerCase()}`,
-      title: `${color} / ${size}`,
-      availableForSale: true,
-      price: String(price),
-      currencyCode: 'INR',
-      selectedOptions: [{ name: 'Size', value: size }, { name: 'Color', value: color }],
-    })),
+    // Force all men's product variants to a flat ₹499
+    variants: sizes.map((size) => {
+      const effectivePrice = 499;
+      return {
+        id: `${handle}-${size.toLowerCase()}`,
+        title: `${color} / ${size}`,
+        availableForSale: true,
+        price: String(effectivePrice),
+        currencyCode: 'INR',
+        selectedOptions: [{ name: 'Size', value: size }, { name: 'Color', value: color }],
+      };
+    }),
   };
 }
 
